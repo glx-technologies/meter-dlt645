@@ -6,7 +6,8 @@ import dlt645
 import sys
 import signal
 import platform 
-from secret import *
+
+from local_keys import *
 
 from serial.tools.list_ports import comports
 
