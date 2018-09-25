@@ -43,6 +43,10 @@ def _test_main(port_id, cur_addr, new_time, wait_for_read, verbose=0):
         rsp = enter_factory_mode(chn, cur_addr, verbose=verbose)
 
     if (rsp):
+        if new_time == []:
+            t0 = time.time() + 1 # add 1s for the delay time
+            sys.stdout.write("\n---> No new time specified. Use system time.\n")
+            new_time = str_to_bcd_time(time.strftime('%H%M%S', time.localtime(t0)))
         rsp = change_meter_time(chn, cur_addr, new_time, verbose=verbose)
     
     if (rsp):
@@ -111,9 +115,10 @@ def _main(argv):
         #sys.exit()
         port_id = def_port
     
-    if new_time == []:
-        sys.stdout.write("\n---> No new time specified. Use system time.\n")
-        new_time = str_to_bcd_time(time.strftime('%H%M%S', time.localtime()))
+#    if new_time == []:
+#        t0 = time.time() + 2 # add 2s for the setup time
+#        sys.stdout.write("\n---> No new time specified. Use system time.\n")
+#        new_time = str_to_bcd_time(time.strftime('%H%M%S', time.localtime(t0)))
 
     if cur_addr == [] :
         sys.stdout.write("\n---> No current meter address, will use broadcast mode to retrieve.\n")

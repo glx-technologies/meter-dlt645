@@ -107,34 +107,34 @@ def rtcc_read_trim_enable(chn, addr, verbose=0):
             sys.stdout.write('Read failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
     
-def rtcc_read_eeprom_fdiv(chn, addr, verbose=0):
+def rtcc_read_ee_fdiv(chn, addr, verbose=0):
     global passwd
     global opid
 
     sys.stdout.write('\n--- RTC Calibration Read EE FDIV ---\n')
     cmd     = [0x8F, 0xF1, 0x00, 0x04]
-    payload = cmd # + passwd + opid 
+    payload = cmd 
     chn.encode(addr, 0x11, payload)
     rsp = chn.xchg_data(verbose=verbose, retry=0)
     if rsp:
         if chn.rx_ctrl == 0x91:
-            sys.stdout.write('Read success (return code %02x).\n' % chn.rx_ctrl)
+            sys.stdout.write('Read success (return code %02x). EE FDIV == 0x%02x%02x\n' % (chn.rx_ctrl, chn.rx_payload[-1], chn.rx_payload[-2]))
         else:
             sys.stdout.write('Read failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
 
-def rtcc_write_eeprom_fdiv(chn, addr, val, verbose=0):
+def rtcc_write_ee_fdiv(chn, addr, val, verbose=0):
     global passwd
     global opid
 
     sys.stdout.write('\n--- RTC Calibration Write EE FDIV ---\n')
     cmd     = [0x8F, 0xF1, 0x00, 0x04]
-    payload = cmd + val + passwd + opid
+    payload = cmd + passwd + opid + val
     chn.encode(addr, 0x14, payload)
     rsp = chn.xchg_data(verbose=verbose, retry=0)
     if rsp:
         if chn.rx_ctrl == 0x94:
-            sys.stdout.write('Write uccess (return code %02x).\n' % chn.rx_ctrl)
+            sys.stdout.write('Write success (return code %02x).\n' % chn.rx_ctrl)
         else:
             sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
