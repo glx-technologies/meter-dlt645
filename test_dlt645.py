@@ -295,8 +295,22 @@ def read_temperature(chn, addr, verbose):
     rsp = chn.xchg_data(verbose)
     if rsp:
         p = chn.rx_payload
-        s = '%02x%02x' % (p[-1], p[-2])
+        sg = ''
+        if p[-1] >= 0x80:
+            p[-1] = p[-1] & 0x7f
+            sg = '-'
+
+        if p[-1]:
+            s = '%x%02x' % (p[-1], p[-2])
+        else:
+            s = '%02x' % p[-2]
+        
+        l = list(s)
+        l.insert(-1, '.')
+        s = ''.join(l)
+        s = sg + s
         sys.stdout.write('Temperature: %s\n' % s)
+        
     return rsp
 
 def read_battery_voltage(chn, addr, verbose):
@@ -305,7 +319,7 @@ def read_battery_voltage(chn, addr, verbose):
     rsp = chn.xchg_data(verbose)
     if rsp:
         p = chn.rx_payload
-        s = '%02x%02x' % (p[-1], p[-2])
+        s = '%x.%02x' % (p[-1], p[-2])
         sys.stdout.write('Battery voltage: %s V\n' % s)
     return rsp
 
