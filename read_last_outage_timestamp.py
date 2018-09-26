@@ -4,7 +4,7 @@ import dlt645
 import sys
 from test_dlt645 import *
 
-verbose = 1
+verbose = 0
 
 port_id = '/dev/ttyUSB0'
 
@@ -20,7 +20,6 @@ rsp = read_meter_address(chn)
 
 if rsp:
     addr = chn.rx_addr;
-    t = time.time() + 60  # valid for 1 min
-    dateline = str_to_bcd_time(time.strftime('%S%M%H', time.localtime())) +  str_to_bcd_date(time.strftime('%d%m%y', time.localtime()))
-    rsp = load_switch_disconnect(chn, addr, dateline, verbose)
+    rsp = read_last_outage_timestamp(chn, addr, verbose)
+    
 

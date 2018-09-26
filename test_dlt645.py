@@ -139,12 +139,13 @@ def rtcc_write_ee_fdiv(chn, addr, val, verbose=0):
             sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
     
-def load_switch_connect(chn, addr, verbose=0):
+def load_switch_connect(chn, addr, dateline, verbose=0):
     global passwd
     global opid
 
     sys.stdout.write('\n--- Load Switch Connect ---\n')
-    payload = passwd + opid + [0x1B, 0x00, 0x22, 0x04, 0x09, 0x26, 0x09, 0x26]
+    #payload = passwd + opid + [0x1B, 0x00, 0x22, 0x04, 0x09, 0x26, 0x09, 0x26]
+    payload = passwd + opid + [0x1B, 0x00] + dateline
     chn.encode(addr, 0x1C, payload)
     rsp = chn.xchg_data(verbose=verbose, retry=0)
     if rsp:
@@ -155,12 +156,13 @@ def load_switch_connect(chn, addr, verbose=0):
             sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
 
-def load_switch_disconnect(chn, addr, verbose=0):
+def load_switch_disconnect(chn, addr, dateline, verbose=0):
     global passwd
     global opid
 
     sys.stdout.write('\n--- Load Switch Disconnect ---\n')
-    payload = passwd + opid + [0x1A, 0x00, 0x19, 0x56, 0x08, 0x26, 0x09, 0x26]
+    #payload = passwd + opid + [0x1A, 0x00, 0x19, 0x56, 0x08, 0x26, 0x09, 0x26]
+    payload = passwd + opid + [0x1A, 0x00] + dateline
     chn.encode(addr, 0x1C, payload)
     rsp = chn.xchg_data(verbose=verbose, retry=0)
     if rsp:
@@ -412,13 +414,13 @@ def bcd_to_str_addr(addr_bcd):
     return s
 
 def str_to_bcd_date(date_str):
-    sys.stdout.write("%s\n" % date_str)
+    #sys.stdout.write("%s\n" % date_str)
     r = []
     l = list(date_str) 
-    if len(l) != 8:
+    if len(l) != 6:
         return r
     l = [int(a) for a in l]
-    for i in range(0,8,2):
+    for i in range(0,6,2):
         s = (l[i]<<4) + l[i+1]
         r.append(s)
     return r

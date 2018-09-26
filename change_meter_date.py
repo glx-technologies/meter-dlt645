@@ -113,7 +113,7 @@ def _main(argv):
     
     if new_date == []:
         sys.stdout.write("\n---> No new date specified. Use system date.\n")
-        new_date = str_to_bcd_date(time.strftime('%y%m%d', time.localtime()) + '00')
+        new_date = str_to_bcd_date(time.strftime('%y%m%d', time.localtime())) + [0x00]
 
     if cur_addr == [] :
         sys.stdout.write("\n---> No current meter address, will use broadcast mode to retrieve.\n")
