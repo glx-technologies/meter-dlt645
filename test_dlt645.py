@@ -139,6 +139,38 @@ def rtcc_write_ee_fdiv(chn, addr, val, verbose=0):
             sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
     
+def load_switch_connect(chn, addr, verbose=0):
+    global passwd
+    global opid
+
+    sys.stdout.write('\n--- Load Switch Connect ---\n')
+    payload = passwd + opid + [0x1B, 0x00, 0x22, 0x04, 0x09, 0x26, 0x09, 0x26]
+    chn.encode(addr, 0x1C, payload)
+    rsp = chn.xchg_data(verbose=verbose, retry=0)
+    if rsp:
+        if chn.rx_ctrl == 0x9C:
+            sys.stdout.write('Write success (return code %02x).\n' % chn.rx_ctrl)
+            sys.stdout.write('Press button for > 3s to connect.\n')
+        else:
+            sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
+    return rsp
+
+def load_switch_disconnect(chn, addr, verbose=0):
+    global passwd
+    global opid
+
+    sys.stdout.write('\n--- Load Switch Disconnect ---\n')
+    payload = passwd + opid + [0x1A, 0x00, 0x19, 0x56, 0x08, 0x26, 0x09, 0x26]
+    chn.encode(addr, 0x1C, payload)
+    rsp = chn.xchg_data(verbose=verbose, retry=0)
+    if rsp:
+        if chn.rx_ctrl == 0x9C:
+            sys.stdout.write('Write success (return code %02x).\n' % chn.rx_ctrl)
+        else:
+            sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
+    return rsp
+
+
 def read_meter_address(chn, verbose=0):
     sys.stdout.write('\n--- Read meter address with broadcase mode ---\n')
     chn.encode([0xaa]*6, 0x13)
