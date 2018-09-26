@@ -10,6 +10,8 @@ import platform
 from local_keys import *
 
 from serial.tools.list_ports import comports
+ 
+dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 def get_def_portx():
     #sys.stdout.write('get_def_port()\n')
@@ -268,7 +270,7 @@ def read_energy(chn, addr, month, segment, verbose=0):
     return rsp
 
 def read_date(chn, addr, verbose=0):
-    dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+   
     sys.stdout.write('\n--- Read date ---\n')
     chn.encode(addr, 0x11, [0x1, 0x1, 0x0, 0x4])
     rsp = chn.xchg_data(verbose)
@@ -321,6 +323,22 @@ def read_battery_voltage(chn, addr, verbose):
         p = chn.rx_payload
         s = '%x.%02x' % (p[-1], p[-2])
         sys.stdout.write('Battery voltage: %s V\n' % s)
+    return rsp
+
+def read_line_frequency(chn, addr, verbose=0):
+    sys.stdout.write('\n--- Read line frequency ---\n')
+    chn.encode(addr, 0x11, [0x02, 0x00, 0x80, 0x02])
+    rsp = chn.xchg_data(verbose)
+    if rsp:
+        if chn.rx_ctrl == 0x91: 
+            p = chn.rx_payload
+            s = "%x%02x" % (p[-1], p[-2])
+            l = list(s)
+            l.insert(-2, '.')
+            s = ''.join(l)
+            sys.stdout.write("Frequency: %s Hz\n" % s)
+        else:
+            sys.stdout.write('Fail to read frequency.\n')
     return rsp
 
 def read_preset_billing_time(chn, addr, verbose):
