@@ -49,8 +49,8 @@ def _test_main(port_id, cur_addr, new_time, wait_for_read, verbose=0):
             new_time = str_to_bcd_time(time.strftime('%H%M%S', time.localtime(t0)))
         rsp = change_meter_time(chn, cur_addr, new_time, verbose=verbose)
     
-    if (rsp):
-        rsp = exit_factory_mode(chn, cur_addr, verbose=verbose)
+    #if (rsp):
+    #    rsp = exit_factory_mode(chn, cur_addr, verbose=verbose)
   
     if (rsp):
         rsp = read_time(chn, cur_addr, verbose=verbose)

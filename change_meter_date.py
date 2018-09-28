@@ -45,8 +45,8 @@ def _test_main(port_id, cur_addr, new_date, wait_for_read, verbose=0):
     if (rsp):
         rsp = change_meter_date(chn, cur_addr, new_date, verbose=verbose)
     
-    if (rsp):
-        rsp = exit_factory_mode(chn, cur_addr, verbose=verbose)
+    #if (rsp):
+    #    rsp = exit_factory_mode(chn, cur_addr, verbose=verbose)
   
     if (rsp):
         rsp = read_date(chn, cur_addr, verbose=verbose)

@@ -45,8 +45,8 @@ def _test_main(port_id, cur_addr, new_addr, wait_for_read, verbose=0):
     if (rsp):
         rsp = change_meter_address(chn, cur_addr, new_addr, verbose=verbose)
     
-    if (rsp):
-        rsp = exit_factory_mode(chn, new_addr, verbose=verbose)
+    #if (rsp):
+    #    rsp = exit_factory_mode(chn, new_addr, verbose=verbose)
     
     if rsp:
         rsp = is_meter_online(chn, new_addr)
