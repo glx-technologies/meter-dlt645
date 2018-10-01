@@ -108,6 +108,38 @@ def rtcc_read_trim_enable(chn, addr, verbose=0):
         else:
             sys.stdout.write('Read failed (return code %02x).\n' % chn.rx_ctrl)
     return rsp
+
+def rtcc_write_pulse_source(chn, addr, val, verbose=0):
+    global passwd
+    global opid
+
+    sys.stdout.write('\n--- RTC Calibration Write Pulse Source ---\n')
+    cmd     = [0x9f, 0xF1, 0x00, 0x04]
+    payload = cmd + passwd + opid + [val]
+    chn.encode(addr, 0x14, payload)
+    rsp = chn.xchg_data(verbose=verbose, retry=0)
+    if rsp:
+        if chn.rx_ctrl == 0x94:
+            sys.stdout.write('Write success (return code %02x).\n' % chn.rx_ctrl)
+        else:
+            sys.stdout.write('Write failed (return code %02x).\n' % chn.rx_ctrl)
+    return rsp
+
+def rtcc_read_pulse_source(chn, addr, verbose=0):
+    global passwd
+    global opid
+
+    sys.stdout.write('\n--- RTC Calibration Read Pulse Source ---\n')
+    cmd     = [0x9f, 0xF1, 0x00, 0x04]
+    payload = cmd 
+    chn.encode(addr, 0x11, payload)
+    rsp = chn.xchg_data(verbose=verbose, retry=0)
+    if rsp:
+        if chn.rx_ctrl == 0x91:
+            sys.stdout.write('Read success (return code %02x). Pulse source == %d\n' % (chn.rx_ctrl, chn.rx_payload[-1]))
+        else:
+            sys.stdout.write('Read failed (return code %02x).\n' % chn.rx_ctrl)
+    return rsp
     
 def rtcc_read_ee_fdiv(chn, addr, verbose=0):
     global passwd
