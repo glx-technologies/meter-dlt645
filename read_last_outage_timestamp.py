@@ -20,6 +20,6 @@ rsp = read_meter_address(chn)
 
 if rsp:
     addr = chn.rx_addr;
-    rsp = read_last_outage_timestamp(chn, addr, verbose)
+    rsp = read_last_outage_timestamp(chn, addr, 1, verbose)
     
 

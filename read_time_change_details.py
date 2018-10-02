@@ -10,9 +10,6 @@ port_id = '/dev/ttyUSB0'
 
 chn=dlt645.Channel(port_id = port_id, tmo_cnt = 10, wait_for_read = 0.5)
 
-
-
-
 # open the channel
 if not chn.open():
     sys.stdout.write('Fail to open %s...exit script!\n\n\n' % port_id)
@@ -23,5 +20,6 @@ rsp = read_meter_address(chn)
 
 if rsp:
     addr = chn.rx_addr;
-    rsp = rtcc_write_ee_fdiv(chn, addr, [0x00, 0x04], verbose)
+    rsp = read_time_change_details(chn, addr, 1, verbose)
+    
 

@@ -383,15 +383,28 @@ def read_preset_billing_time(chn, addr, verbose):
         sys.stdout.write('Last outage timestamp: %s\n' % s)
     return rsp
 
-def read_last_outage_timestamp(chn, addr, verbose):
-    sys.stdout.write('\n--- Read last outage timestamp ---\n')
-    chn.encode(addr, 0x11, [0x01, 0x00, 0x11, 0x03])
+def read_last_outage_timestamp(chn, addr, index, verbose):
+    sys.stdout.write('\n--- Read last outage timestamp of N = %d ---\n' % index)
+    chn.encode(addr, 0x11, [index, 0x00, 0x11, 0x03])
     rsp = chn.xchg_data(verbose)
     if rsp:
         p = chn.rx_payload
         s1 = '%02x-%02x-%02x %02x:%02x:%02x' % (p[-1], p[-2], p[-3], p[-4], p[-5], p[-6])
         s2 = '%02x-%02x-%02x %02x:%02x:%02x' % (p[-7], p[-8], p[-9], p[-10], p[-11], p[-12])
-        sys.stdout.write('Last outage timestamp: %s - %s \n' % (s1, s2))
+        sys.stdout.write('Last outage timestamp: %s ----> %s \n' % (s2, s1))
+    return rsp
+
+def read_time_change_details(chn, addr, index, verbose):
+    sys.stdout.write('\n--- Read Time Change Details of N = %d ---\n' % index)
+    chn.encode(addr, 0x11, [index, 0x04, 0x30, 0x03])
+    rsp = chn.xchg_data(verbose)
+    if rsp:
+        p = chn.rx_payload
+        s3 = '%02x%02x%02x%02x' % (p[-13], p[-14], p[-15], p[-16])
+        sys.stdout.write('Op Id = %s\n' % s3)
+        s1 = '%02x-%02x-%02x %02x:%02x:%02x' % (p[-1], p[-2], p[-3], p[-4], p[-5], p[-6])
+        s2 = '%02x-%02x-%02x %02x:%02x:%02x' % (p[-7], p[-8], p[-9], p[-10], p[-11], p[-12])
+        sys.stdout.write('Time: %s ----> %s \n' % (s2, s1))
     return rsp
 
 #--------------------------------------
