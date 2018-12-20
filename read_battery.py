@@ -4,7 +4,7 @@ import dlt645
 import sys
 from test_dlt645 import *
 
-verbose = 0
+verbose = 1
 
 port_id = '/dev/ttyUSB0'
 

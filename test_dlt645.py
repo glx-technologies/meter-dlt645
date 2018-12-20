@@ -323,7 +323,7 @@ def read_time(chn, addr, verbose=0):
     return rsp
 
 #--------------------------------------
-def read_temperature(chn, addr, verbose):
+def read_temperature(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read temperature ---\n')
     chn.encode(addr, 0x11, [0x07, 0x00, 0x80, 0x02])
     rsp = chn.xchg_data(verbose)
@@ -343,11 +343,11 @@ def read_temperature(chn, addr, verbose):
         l.insert(-1, '.')
         s = ''.join(l)
         s = sg + s
-        sys.stdout.write('Temperature: %s\n' % s)
+        sys.stdout.write('Temperature: %s degree Celsius\n' % s)
         
     return rsp
 
-def read_battery_voltage(chn, addr, verbose):
+def read_battery_voltage(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read battery voltage ---\n')
     chn.encode(addr, 0x11, [0x08, 0x00, 0x80, 0x02])
     rsp = chn.xchg_data(verbose)
@@ -373,7 +373,7 @@ def read_line_frequency(chn, addr, verbose=0):
             sys.stdout.write('Fail to read frequency.\n')
     return rsp
 
-def read_preset_billing_time(chn, addr, verbose):
+def read_preset_billing_time(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read preset billing time ---\n')
     chn.encode(addr, 0x11, [0x04, 0x12, 0x00, 0x04])
     rsp = chn.xchg_data(verbose)
@@ -383,7 +383,7 @@ def read_preset_billing_time(chn, addr, verbose):
         sys.stdout.write('Last outage timestamp: %s\n' % s)
     return rsp
 
-def read_last_outage_timestamp(chn, addr, index, verbose):
+def read_last_outage_timestamp(chn, addr, index, verbose=0):
     sys.stdout.write('\n--- Read last outage timestamp of N = %d ---\n' % index)
     chn.encode(addr, 0x11, [index, 0x00, 0x11, 0x03])
     rsp = chn.xchg_data(verbose)
@@ -394,7 +394,7 @@ def read_last_outage_timestamp(chn, addr, index, verbose):
         sys.stdout.write('Last outage timestamp: %s ----> %s \n' % (s2, s1))
     return rsp
 
-def read_time_change_details(chn, addr, index, verbose):
+def read_time_change_details(chn, addr, index, verbose=0):
     sys.stdout.write('\n--- Read Time Change Details of N = %d ---\n' % index)
     chn.encode(addr, 0x11, [index, 0x04, 0x30, 0x03])
     rsp = chn.xchg_data(verbose)
@@ -449,7 +449,7 @@ def _test_main(port_id, addr, wait_for_read=0.5, verbose=0):
         rsp = read_battery_voltage(chn, addr, verbose)
     
     if rsp:
-        rsp = read_last_outage_timestamp(chn, addr, verbose)
+        rsp = read_last_outage_timestamp(chn, addr, 1, verbose)
 
     if rsp:
         rsp = read_preset_billing_time(chn, addr, verbose)
