@@ -26,6 +26,7 @@ power = '0'
 meter_date = ' '
 meter_time = ' ' 
 temperature = '0'
+meter_address = '000000000000'
 
 # we are able to make 2 different requests on our webpage
 # GET = we just type in the url
@@ -40,13 +41,21 @@ def index():
     global meter_date
     global meter_time
     global temperature
-
+    global meter_address
     page = 0
 
     # if we make a post request on the webpage aka press button then do stuff
     if request.method == 'POST':
 
-        if request.form['submit'] == 'Read Battery': 
+        if request.form['submit']== 'Set Meter Address':
+            tmp_meter_address = request.form['address']
+            if len(tmp_meter_address) == 12:
+                meter_address = tmp_meter_address
+                meter_address_bcd = str_to_bcd_addr(meter_address)
+                sys.stdout.write("%s\n" % bcd_to_str_addr(meter_address_bcd))
+                sys.stdout.flush()
+
+        elif request.form['submit'] == 'Read Battery': 
             # read meter address
             rsp = read_meter_address(chn)
             if rsp:
@@ -148,6 +157,7 @@ def index():
         # the default page to display will be our template with our template variables
         return render_template('index.html', \
             battery=battery, \
+            meter_address=meter_address,\
             meter_date=meter_date,\
             meter_time=meter_time,\
             temperature=temperature,\
@@ -185,4 +195,4 @@ if __name__ == "__main__":
     # lets launch our webpage!
     # do 0.0.0.0 so that we can log into this webpage
     # using another computer on the same network later
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)

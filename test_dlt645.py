@@ -499,7 +499,11 @@ def str_to_bcd_addr(addr_str):
     l = list(addr_str) 
     if len(l) != 12:
         return r
-    l = [int(a) for a in l]
+    try:
+        l = [int(a) for a in l]
+    except ValueError:
+        return []
+
     for i in range(0,12,2):
         s = (l[i]<<4) + l[i+1]
         r.append(s)
