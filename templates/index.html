@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Meter Web App</title>
+  </head>
+
+  <body>
+
+    <form  action="/" method="post">
+    <p>
+    <input type="submit" name="submit" value="Load Switch Connect"> 
+    <input type="submit" name="submit" value="Load Switch Disconnect"> 
+    </p>
+    <p> <input type="submit" name="submit" value="Read Battery"> {{battery_voltage}}  </p> 
+    <p> <input type="submit" name="submit" value="Read Current Month Total Energy"> {{current_total_energy}}  </p> 
+    <p> <input type="submit" name="submit" value="Read Voltage"> {{voltage}}  </p> 
+    </form>
+
+  </body>
+</html>
