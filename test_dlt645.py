@@ -248,7 +248,14 @@ def read_voltage(chn, addr, verbose=0):
         sys.stdout.write("Voltage: %s V\n" % s)
 
     return rsp
-    
+
+def get_voltage_string(p):
+    s = "%x%02x" % (p[-1], p[-2])
+    l = list(s)
+    l.insert(-1, '.')
+    s = ''.join(l)
+    return s
+
 def read_current(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read current ---\n')
     chn.encode(addr, 0x11, [0x0, 0x1, 0x2, 0x2])
@@ -300,6 +307,19 @@ def read_energy(chn, addr, month, segment, verbose=0):
         sys.stdout.write("%s: %s kWh\n" % (segment_tab[segment], s))
             
     return rsp
+
+def get_energy_string(p):
+    if p[-1]:
+        s = "%x%02x%02x%02x" % (p[-1], p[-2], p[-3], p[-4])
+    elif p[-2]:
+        s = "%x%02x%02x" % (p[-2], p[-3], p[-4])
+    else:
+        s = "%x%02x" % (p[-3], p[-4])
+        
+    l = list(s)
+    l.insert(-2, '.')
+    s = ''.join(l)
+    return s
 
 def read_date(chn, addr, verbose=0):
    
