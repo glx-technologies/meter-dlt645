@@ -1,3 +1,4 @@
 pyserial
 Flask_SocketIO==3.0.0
 Flask==1.0.2
+uwsgi

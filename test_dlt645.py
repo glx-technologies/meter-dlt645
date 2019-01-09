@@ -225,14 +225,17 @@ def read_power(chn, addr, verbose=0):
     chn.encode(addr, 0x11, [0x0, 0x0, 0x3, 0x2])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        s = "%x%02x%02x" % (p[-1], p[-2], p[-3])
-        l = list(s)
-        l.insert(-4, '.')
-        s = ''.join(l)
+        s = get_power_string(chn.rx_payload)
         sys.stdout.write("Power: %s kW\n" % s)
-
+    
     return rsp
+
+def get_power_string(p):
+    s = "%x%02x%02x" % (p[-1], p[-2], p[-3])
+    l = list(s)
+    l.insert(-4, '.')
+    s = ''.join(l)
+    return s
 
 def read_voltage(chn, addr, verbose=0):
     # page 53, table A3
@@ -240,11 +243,7 @@ def read_voltage(chn, addr, verbose=0):
     chn.encode(addr, 0x11, [0x0, 0x1, 0x1, 0x2])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        s = "%x%02x" % (p[-1], p[-2])
-        l = list(s)
-        l.insert(-1, '.')
-        s = ''.join(l)
+        s = get_voltage_string(chn.rx_payload)
         sys.stdout.write("Voltage: %s V\n" % s)
 
     return rsp
@@ -261,25 +260,27 @@ def read_current(chn, addr, verbose=0):
     chn.encode(addr, 0x11, [0x0, 0x1, 0x2, 0x2])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        
-        sg = ''
-        if p[-1] >= 0x80:
-            p[-1] = p[-1] & 0x7f
-            sg = '-'
-
-        if p[-1]:
-            s = "%x%02x%02x" % (p[-1], p[-2], p[-3])
-        else:
-            s = "%02x%02x" % (p[-2], p[-3])
-
-        l = list(s)
-        l.insert(-3, '.')
-        s = ''.join(l)
-        s = sg + s
+        s = get_current_string(chn.rx_payload)
         sys.stdout.write("Current: %s A\n" %s)
 
     return rsp
+
+def get_current_string(p):
+    sg = ''
+    if p[-1] >= 0x80:
+        p[-1] = p[-1] & 0x7f
+        sg = '-'
+
+    if p[-1]:
+        s = "%x%02x%02x" % (p[-1], p[-2], p[-3])
+    else:
+        s = "%02x%02x" % (p[-2], p[-3])
+
+    l = list(s)
+    l.insert(-3, '.')
+    s = ''.join(l)
+    s = sg.join(s)
+    return s
 
 def read_energy(chn, addr, month, segment, verbose=0):
     month_tab = ['Current', 'Last 1', 'Last 2', 'Last 3', \
@@ -292,18 +293,7 @@ def read_energy(chn, addr, month, segment, verbose=0):
     chn.encode(addr, 0x11, [month, segment, 0x0, 0x0])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        
-        if p[-1]:
-            s = "%x%02x%02x%02x" % (p[-1], p[-2], p[-3], p[-4])
-        elif p[-2]:
-            s = "%x%02x%02x" % (p[-2], p[-3], p[-4])
-        else:
-            s = "%x%02x" % (p[-3], p[-4])
-        
-        l = list(s)
-        l.insert(-2, '.')
-        s = ''.join(l)
+        s = get_energy_string(chn.rx_payload)
         sys.stdout.write("%s: %s kWh\n" % (segment_tab[segment], s))
             
     return rsp
@@ -327,20 +317,26 @@ def read_date(chn, addr, verbose=0):
     chn.encode(addr, 0x11, [0x1, 0x1, 0x0, 0x4])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        s = '%02x-%02x-%02x %s' % (p[-1], p[-2], p[-3], dow[p[-4]])
+        s = get_date_string(chn.rx_payload)
         sys.stdout.write('Date: %s\n' % s)
     return rsp
+
+def get_date_string(p):
+    s = '%02x-%02x-%02x %s' % (p[-1], p[-2], p[-3], dow[p[-4]])
+    return s
 
 def read_time(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read time ---\n')
     chn.encode(addr, 0x11, [0x2, 0x1, 0x0, 0x4])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        s = '%02x:%02x:%02x' % (p[-1], p[-2], p[-3])
+        s = get_time_string(chn.rx_payload)
         sys.stdout.write('Time: %s\n' % s)
     return rsp
+
+def get_time_string(p):
+    s = '%02x:%02x:%02x' % (p[-1], p[-2], p[-3])
+    return s
 
 #--------------------------------------
 def read_temperature(chn, addr, verbose=0):
@@ -348,34 +344,39 @@ def read_temperature(chn, addr, verbose=0):
     chn.encode(addr, 0x11, [0x07, 0x00, 0x80, 0x02])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        sg = ''
-        if p[-1] >= 0x80:
-            p[-1] = p[-1] & 0x7f
-            sg = '-'
-
-        if p[-1]:
-            s = '%x%02x' % (p[-1], p[-2])
-        else:
-            s = '%02x' % p[-2]
-        
-        l = list(s)
-        l.insert(-1, '.')
-        s = ''.join(l)
-        s = sg + s
+        s = get_temperature_string( chn.rx_payload)
         sys.stdout.write('Temperature: %s degree Celsius\n' % s)
-        
     return rsp
+       
+def get_temperature_string(p):
+    sg = ''
+    if p[-1] >= 0x80:
+        p[-1] = p[-1] & 0x7f
+        sg = '-'
+
+    if p[-1]:
+        s = '%x%02x' % (p[-1], p[-2])
+    else:
+        s = '%02x' % p[-2]
+    
+    l = list(s)
+    l.insert(-1, '.')
+    s = ''.join(l)
+    s = sg.join(s)
+    return s
 
 def read_battery_voltage(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read battery voltage ---\n')
     chn.encode(addr, 0x11, [0x08, 0x00, 0x80, 0x02])
     rsp = chn.xchg_data(verbose)
     if rsp:
-        p = chn.rx_payload
-        s = '%x.%02x' % (p[-1], p[-2])
+        s = get_battery_voltage_string(chn.rx_payload)
         sys.stdout.write('Battery voltage: %s V\n' % s)
     return rsp
+
+def get_battery_voltage_string(p):
+    s = '%x.%02x' % (p[-1], p[-2])
+    return s
 
 def read_line_frequency(chn, addr, verbose=0):
     sys.stdout.write('\n--- Read line frequency ---\n')

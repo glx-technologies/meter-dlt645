@@ -5,15 +5,17 @@
   </head>
 
   <body>
-
     <form  action="/" method="post">
-    <p>
-    <input type="submit" name="submit" value="Load Switch Connect"> 
-    <input type="submit" name="submit" value="Load Switch Disconnect"> 
-    </p>
-    <p> <input type="submit" name="submit" value="Read Battery"> {{battery_voltage}}  </p> 
-    <p> <input type="submit" name="submit" value="Read Current Month Total Energy"> {{current_total_energy}}  </p> 
-    <p> <input type="submit" name="submit" value="Read Voltage"> {{voltage}}  </p> 
+    <p> <input type="submit" name="submit" value="Read Energy"  > {{energy}} kWh </p> 
+    <p> <input type="submit" name="submit" value="Read Voltage" > {{voltage}} V </p> 
+    <p> <input type="submit" name="submit" value="Read Current" > {{current}} A  </p> 
+    <p> <input type="submit" name="submit" value="Read Power" > {{power}} kW  </p> 
+
+    <p> <input type="submit" name="submit" value="Load Switch" ></p> 
+    <p> <input type="submit" name="submit" value="Read Date" > {{date}} </p> 
+    <p> <input type="submit" name="submit" value="Read Time" > {{time}} </p> 
+    <p> <input type="submit" name="submit" value="Read Battery" > {{battery}} V </p> 
+    <p> <input type="submit" name="submit" value="Read Temperature" > {{temperature}} &#8451; </p> 
     </form>
 
   </body>
