@@ -3,4 +3,8 @@ local_keys.py
 
 *.swp
 
+*.pyc
+
+venv*
+
 __pycache__
