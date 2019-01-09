@@ -23,8 +23,8 @@ energy = '0'
 voltage = '0'
 current = '0'
 power = '0'
-date = ' '
-time = ' ' 
+meter_date = ' '
+meter_time = ' ' 
 temperature = '0'
 
 # we are able to make 2 different requests on our webpage
@@ -37,8 +37,8 @@ def index():
     global voltage
     global current
     global power
-    global date
-    global time
+    global meter_date
+    global meter_time
     global temperature
 
     page = 0
@@ -62,7 +62,7 @@ def index():
                 addr = chn.rx_addr;
                 rsp = read_date(chn, addr, verbose)
             if rsp:
-                date = get_date_string(chn.rx_payload)
+                meter_date = get_date_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Time': 
             # read meter address
@@ -71,7 +71,7 @@ def index():
                 addr = chn.rx_addr;
                 rsp = read_time(chn, addr, verbose)
             if rsp:
-                time = get_time_string(chn.rx_payload)
+                meter_time = get_time_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Temperature': 
             # read meter address
@@ -148,8 +148,8 @@ def index():
         # the default page to display will be our template with our template variables
         return render_template('index.html', \
             battery=battery, \
-            date=date,\
-            time=time,\
+            meter_date=meter_date,\
+            meter_time=meter_time,\
             temperature=temperature,\
             energy=energy,\
             voltage=voltage,\
