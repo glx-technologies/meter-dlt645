@@ -128,7 +128,10 @@ def index():
         elif request.form['submit'] == 'Load Switch Connect': 
             rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
+                sys.stdout.write('2')
+                sys.stdout.flush()
                 addr = chn.rx_addr;
+                rsp = enter_factory_mode(chn, addr, verbose)
                 t = time.time() + 60  # valid for 1 min
                 dateline = str_to_bcd_time(time.strftime('%S%M%H', time.localtime())) +  str_to_bcd_date(time.strftime('%d%m%y', time.localtime()))
                 rsp = load_switch_connect(chn, addr, dateline, verbose)
@@ -136,7 +139,10 @@ def index():
         elif request.form['submit'] == 'Load Switch Disconnect': 
             rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
+                sys.stdout.write('2')
+                sys.stdout.flush()
                 addr = chn.rx_addr;
+                rsp = enter_factory_mode(chn, addr, verbose)
                 t = time.time() + 60  # valid for 1 min
                 dateline = str_to_bcd_time(time.strftime('%S%M%H', time.localtime())) +  str_to_bcd_date(time.strftime('%d%m%y', time.localtime()))
                 rsp = load_switch_disconnect(chn, addr, dateline, verbose)
@@ -165,7 +171,10 @@ def load_switch():
         if request.form['submit'] == 'Load Switch Connect': 
             rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
+                sys.stdout.write('2')
+                sys.stdout.flush()
                 addr = chn.rx_addr;
+                rsp = enter_factory_mode(chn, addr, verbose)
                 t = time.time() + 60  # valid for 1 min
                 dateline = str_to_bcd_time(time.strftime('%S%M%H', time.localtime())) +  str_to_bcd_date(time.strftime('%d%m%y', time.localtime()))
                 rsp = load_switch_connect(chn, addr, dateline, verbose)
@@ -173,7 +182,10 @@ def load_switch():
         elif request.form['submit'] == 'Load Switch Disconnect': 
             rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
+                sys.stdout.write('2')
+                sys.stdout.flush()
                 addr = chn.rx_addr;
+                rsp = enter_factory_mode(chn, addr, verbose)
                 t = time.time() + 60  # valid for 1 min
                 dateline = str_to_bcd_time(time.strftime('%S%M%H', time.localtime())) +  str_to_bcd_date(time.strftime('%d%m%y', time.localtime()))
                 rsp = load_switch_disconnect(chn, addr, dateline, verbose)
