@@ -59,8 +59,6 @@ def index():
                 sys.stdout.flush()
 
         elif request.form['submit'] == 'Read Battery': 
-            # read meter address
-            #rsp = read_meter_address(chn)
             rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
@@ -69,8 +67,7 @@ def index():
                 battery = get_battery_voltage_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Date': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_date(chn, addr, verbose)
@@ -78,8 +75,7 @@ def index():
                 meter_date = get_date_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Time': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_time(chn, addr, verbose)
@@ -87,8 +83,7 @@ def index():
                 meter_time = get_time_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Temperature': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_temperature(chn, addr, verbose)
@@ -96,8 +91,7 @@ def index():
                 temperature = get_temperature_string(chn.rx_payload)
 
         elif request.form['submit'] == 'Read Energy': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_energy(chn, addr, 0, 0, verbose)
@@ -105,8 +99,7 @@ def index():
                 energy = get_energy_string(chn.rx_payload)
 
         elif request.form['submit'] == 'Read Voltage': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_voltage(chn, addr, verbose)
@@ -114,8 +107,7 @@ def index():
                 voltage = get_voltage_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Current': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_current(chn, addr, verbose)
@@ -123,8 +115,7 @@ def index():
                 current = get_current_string(chn.rx_payload)
         
         elif request.form['submit'] == 'Read Power': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_power(chn, addr, verbose)
@@ -135,8 +126,7 @@ def index():
             page = 1
         
         elif request.form['submit'] == 'Load Switch Connect': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 t = time.time() + 60  # valid for 1 min
@@ -144,8 +134,7 @@ def index():
                 rsp = load_switch_connect(chn, addr, dateline, verbose)
                  
         elif request.form['submit'] == 'Load Switch Disconnect': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 t = time.time() + 60  # valid for 1 min
@@ -174,8 +163,7 @@ def index():
 def load_switch():
     if request.method == 'POST':
         if request.form['submit'] == 'Load Switch Connect': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 t = time.time() + 60  # valid for 1 min
@@ -183,8 +171,7 @@ def load_switch():
                 rsp = load_switch_connect(chn, addr, dateline, verbose)
                  
         elif request.form['submit'] == 'Load Switch Disconnect': 
-            # read meter address
-            rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 t = time.time() + 60  # valid for 1 min
