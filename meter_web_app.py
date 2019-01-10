@@ -27,6 +27,7 @@ meter_date = ' '
 meter_time = ' ' 
 temperature = '0'
 meter_address = '000000000000'
+meter_address_bcd = [(0x0)*6]
 
 # we are able to make 2 different requests on our webpage
 # GET = we just type in the url
@@ -42,6 +43,8 @@ def index():
     global meter_time
     global temperature
     global meter_address
+    global meter_address_bcd
+
     page = 0
 
     # if we make a post request on the webpage aka press button then do stuff
@@ -57,7 +60,8 @@ def index():
 
         elif request.form['submit'] == 'Read Battery': 
             # read meter address
-            rsp = read_meter_address(chn)
+            #rsp = read_meter_address(chn)
+            rsp = is_meter_online(chn, meter_address_bcd, verbose)
             if rsp:
                 addr = chn.rx_addr;
                 rsp = read_battery_voltage(chn, addr, verbose)
