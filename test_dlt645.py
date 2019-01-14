@@ -248,7 +248,8 @@ def read_voltage(chn, addr, verbose=0):
 
     return rsp
 
-def get_voltage_string(p):
+def get_voltage_string(ap):
+    p = ap[:]
     s = "%x%02x" % (p[-1], p[-2])
     l = list(s)
     l.insert(-1, '.')
@@ -265,7 +266,8 @@ def read_current(chn, addr, verbose=0):
 
     return rsp
 
-def get_current_string(p):
+def get_current_string(ap):
+    p = ap[:]
     sg = ''
     if p[-1] >= 0x80:
         p[-1] = p[-1] & 0x7f
@@ -279,7 +281,7 @@ def get_current_string(p):
     l = list(s)
     l.insert(-3, '.')
     s = ''.join(l)
-    s = sg.join(s)
+    s = sg + s
     return s
 
 def read_energy(chn, addr, month, segment, verbose=0):
@@ -298,7 +300,8 @@ def read_energy(chn, addr, month, segment, verbose=0):
             
     return rsp
 
-def get_energy_string(p):
+def get_energy_string(ap):
+    p = ap[:]
     if p[-1]:
         s = "%x%02x%02x%02x" % (p[-1], p[-2], p[-3], p[-4])
     elif p[-2]:
@@ -321,7 +324,8 @@ def read_date(chn, addr, verbose=0):
         sys.stdout.write('Date: %s\n' % s)
     return rsp
 
-def get_date_string(p):
+def get_date_string(ap):
+    p = ap[:]
     s = '%02x-%02x-%02x %s' % (p[-1], p[-2], p[-3], dow[p[-4]])
     return s
 
@@ -334,7 +338,8 @@ def read_time(chn, addr, verbose=0):
         sys.stdout.write('Time: %s\n' % s)
     return rsp
 
-def get_time_string(p):
+def get_time_string(ap):
+    p = ap[:]
     s = '%02x:%02x:%02x' % (p[-1], p[-2], p[-3])
     return s
 
@@ -348,7 +353,8 @@ def read_temperature(chn, addr, verbose=0):
         sys.stdout.write('Temperature: %s degree Celsius\n' % s)
     return rsp
        
-def get_temperature_string(p):
+def get_temperature_string(ap):
+    p = ap[:]
     sg = ''
     if p[-1] >= 0x80:
         p[-1] = p[-1] & 0x7f
@@ -362,7 +368,7 @@ def get_temperature_string(p):
     l = list(s)
     l.insert(-1, '.')
     s = ''.join(l)
-    s = sg.join(s)
+    s = sg + s
     return s
 
 def read_battery_voltage(chn, addr, verbose=0):
@@ -374,7 +380,8 @@ def read_battery_voltage(chn, addr, verbose=0):
         sys.stdout.write('Battery voltage: %s V\n' % s)
     return rsp
 
-def get_battery_voltage_string(p):
+def get_battery_voltage_string(ap):
+    p = ap[:]
     s = '%x.%02x' % (p[-1], p[-2])
     return s
 
